@@ -5,6 +5,8 @@
  */
 package NangCao;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -37,6 +39,8 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     static List<Question> list_10 = new ArrayList<>();
     static List<Integer> lstThuTuCauHoi = new ArrayList<>();
     static List<Choice> list_choice = new ArrayList();
+    static List<Student> result_test = new ArrayList();
+    boolean selected = false;
 
     /**
      * Creates new form NC1
@@ -44,10 +48,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     public NC1() {
         initComponents();
         setLocationRelativeTo(null);
-        Run();
-        First();
-        fillForm();
-
     }
 
     @Override
@@ -64,13 +64,14 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     RUN_TIMER = false;
                     lblMin.setText("0");
                     lblSec.setText("0");
-                    Finish();
+                    Timeout();
+
                 } else {
                     lblMin.setText(String.valueOf(min));
                     lblSec.setText(String.valueOf(sec));
                 }
 
-                Thread.sleep(1);
+                Thread.sleep(100);
 
             } catch (Exception e) {
 
@@ -78,14 +79,19 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         }
     }
 
+    public void Timeout() {
+        Mark();
+        JOptionPane.showMessageDialog(this, "Fullname: " + result_test.get(0).getFullname() + "\nStudent ID: " + result_test.get(0).getFpid() + "\nYour score: " + result_test.get(0).getScore());
+        System.exit(0);
+    }
+
     public void fillForm() {
-        for (Question q : list_10) {
-            txaQuestion.setText(q.getQuestion());
-            chkAnswer1.setText(q.getAnswer1());
-            chkAnswer2.setText(q.getAnswer2());
-            chkAnswer3.setText(q.getAnswer3());
-            chkAnswer4.setText(q.getAnswer4());
-        }
+        txaQuestion.setText(list_10.get(0).getQuestion());
+        chkAnswer1.setText(list_10.get(0).getAnswer1());
+        chkAnswer2.setText(list_10.get(0).getAnswer2());
+        chkAnswer3.setText(list_10.get(0).getAnswer3());
+        chkAnswer4.setText(list_10.get(0).getAnswer4());
+
     }
 
     public Object Open(String path) throws Exception {
@@ -142,10 +148,12 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         }
         fillForm();
     }
-    
+
     boolean check = false;
+    boolean scored = false;
+    boolean trung = true;
+
     void Mark() {
-        
         String choice = "";
         String q = "";
 
@@ -170,23 +178,103 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             check = true;
         }
 
-        if (check) {
-            Choice choice1 = new Choice();
-
-            choice1.setQuestion(q);
-            choice1.setChoice(choice);
-            list_choice.add(choice1);
-
-            buttonGroup1.clearSelection();
-
+        
+        
+        if (list_choice.size() != list_10.size()) {
+            if (check) {
+                Choice choice1 = new Choice();
+                choice1.setQuestion(q);
+                choice1.setChoice(choice);
+                choice1.setSelected(true);
+                choice1.setMarked("Notdone");
+                list_choice.add(choice1);
+            }
         }
+        
+        for (Choice question : list_choice) {
+            System.out.println(question.getChoice().isEmpty());
+        }
+
+        int score = 0;
+        for (Question question : list_10) {
+            for (Choice choice1 : list_choice) {
+                if (choice1.getQuestion().equalsIgnoreCase(question.getQuestion())) {
+                    if (choice1.getChoice().equals(question.getRight())) {
+                        score += 1;
+                    }
+                }
+            }
+        }
+
+        if (min < 0) {
+            String fullname = JOptionPane.showInputDialog("Enter your fullname: ");
+            while (fullname.length() == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter your fullname!");
+                fullname = JOptionPane.showInputDialog("Enter your fullname: ");
+            }
+
+            String fpid = JOptionPane.showInputDialog("Enter your student ID: ");
+            while (fpid.length() == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter your student ID!");
+                fpid = JOptionPane.showInputDialog("Enter your student ID: ");
+            }
+            int score1 = score;
+
+            Student stu = new Student();
+            stu.setFullname(fullname);
+            stu.setFpid(fpid);
+            stu.setScore(score1);
+            result_test.add(stu);
+        }
+        buttonGroup1.clearSelection();
+        trung = true;
     }
 
-    void Finish() {
-        Mark();
-        int choice = JOptionPane.showConfirmDialog(this, "Do you want to finish the test?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (choice == JOptionPane.YES_OPTION) {
+    void Finish(int i
+    ) {
+        int yesno = JOptionPane.showConfirmDialog(this, "Do you want to finish the test?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (yesno == JOptionPane.YES_OPTION) {
+            RUN_TIMER = false;
+            runTimer.stop();
+            btnFinish.setEnabled(false);
+
+            String choice = "";
+            String q = "";
+
+            if (chkAnswer1.isSelected()) {
+                choice = chkAnswer1.getText();
+                q = txaQuestion.getText();
+                check = true;
+            }
+            if (chkAnswer2.isSelected()) {
+                choice = chkAnswer2.getText();
+                q = txaQuestion.getText();
+                check = true;
+            }
+            if (chkAnswer3.isSelected()) {
+                choice = chkAnswer3.getText();
+                q = txaQuestion.getText();
+                check = true;
+            }
+            if (chkAnswer4.isSelected()) {
+                choice = chkAnswer4.getText();
+                q = txaQuestion.getText();
+                check = true;
+            }
+
+            if (check) {
+                Choice choice1 = new Choice();
+
+                choice1.setQuestion(q);
+                choice1.setChoice(choice);
+                list_choice.add(choice1);
+
+                buttonGroup1.clearSelection();
+
+            }
+
             int score = 0;
+
             for (Question question : list) {
                 for (Choice choice1 : list_choice) {
                     if (question.getQuestion().equalsIgnoreCase(choice1.getQuestion())) {
@@ -196,8 +284,42 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     }
                 }
             }
-            JOptionPane.showMessageDialog(this, "Your score is: " + score); 
+
+            String fullname = JOptionPane.showInputDialog("Enter your fullname: ");
+            while (fullname.length() == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter your fullname!");
+                fullname = JOptionPane.showInputDialog("Enter your fullname: ");
+            }
+
+            String fpid = JOptionPane.showInputDialog("Enter your student ID: ");
+            while (fpid.length() == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter your student ID!");
+                fpid = JOptionPane.showInputDialog("Enter your student ID: ");
+            }
+
+            int score1 = score;
+
+            if (fullname.length() != 0 && fpid.length() != 0) {
+                Student stu = new Student();
+                stu.setFullname(fullname);
+                stu.setFpid(fpid);
+                stu.setScore(score1);
+                result_test.add(stu);
+            }
+
+            int choice7 = JOptionPane.showConfirmDialog(this, "Are you sure?",
+                    "Confirm", JOptionPane.OK_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (choice7 == JOptionPane.OK_OPTION) {
+                JOptionPane.showMessageDialog(this, "Fullname: " + result_test.get(0).getFullname() + "\nStudent ID: " + result_test.get(0).getFpid() + "\nYour score: " + result_test.get(0).getScore());
+                System.exit(0);
+            }
+
         }
+
+    }
+
+    public void Add() {
 
     }
 
@@ -209,8 +331,13 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         chkAnswer4.setText(list_10.get(0).getAnswer4());
     }
 
+    public void Remember() {
+
+    }
+
     public void Next() {
         Mark();
+        buttonGroup1.clearSelection();
 
         if (txaQuestion.getText().isEmpty()) {
             txaQuestion.setText(list_10.get(1).getQuestion());
@@ -239,11 +366,18 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         }
 
         check = false;
-        System.out.println("----------");
 
+        for (Choice g : list_choice) {
+            System.out.println("Câu: " + g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
+            System.out.println("--------------------------------");
+        }
     }
 
     public void Prev() {
+
+        Mark();
+        buttonGroup1.clearSelection();
+
         if (txaQuestion.getText().isEmpty()) {
             txaQuestion.setText(list_10.get(list_10.size() - 1).getQuestion());
             chkAnswer1.setText(list_10.get(list_10.size() - 1).getAnswer1());
@@ -268,31 +402,10 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             chkAnswer3.setText(list_10.get(j).getAnswer3());
             chkAnswer4.setText(list_10.get(j).getAnswer4());
         }
-
-        boolean check = false;
-        String choice = "";
-        if (chkAnswer1.isSelected()) {
-            choice = chkAnswer1.getText();
-            check = true;
-            System.out.println(choice);
-        }
-
-        if (chkAnswer2.isSelected()) {
-            choice = chkAnswer2.getText();
-            check = true;
-            System.out.println(choice);
-        }
-
-        if (chkAnswer3.isSelected()) {
-            choice = chkAnswer3.getText();
-            check = true;
-            System.out.println(choice);
-        }
-
-        if (chkAnswer4.isSelected()) {
-            choice = chkAnswer4.getText();
-            check = true;
-            System.out.println(choice);
+        check = false;
+        for (Choice g : list_choice) {
+            System.out.println("Câu: " + g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
+            System.out.println("--------------------------------");
         }
     }
 
@@ -303,6 +416,22 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         chkAnswer2.setText(list_10.get(last).getAnswer2());
         chkAnswer3.setText(list_10.get(last).getAnswer3());
         chkAnswer4.setText(list_10.get(last).getAnswer4());
+    }
+
+    boolean click = true;
+
+    public void Start(int i) {
+        Run();
+        First();
+        fillForm();
+
+        RUN_TIMER = true;
+        runTimer = new Thread(this);
+        runTimer.start();
+
+        if (i > 1) {
+            btnStart.setEnabled(false);
+        }
     }
 
     /**
@@ -331,6 +460,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         chkAnswer2 = new javax.swing.JCheckBox();
         chkAnswer3 = new javax.swing.JCheckBox();
         chkAnswer4 = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -451,6 +581,13 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         buttonGroup1.add(chkAnswer4);
         chkAnswer4.setText("Answer 4");
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -461,6 +598,8 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnStart)
+                        .addGap(166, 166, 166)
+                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Timer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(37, 37, 37))
@@ -487,9 +626,11 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(Timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -515,14 +656,13 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         // TODO add your handling code here:
-        RUN_TIMER = true;
-        runTimer = new Thread(this);
-        runTimer.start();
+        Start(evt.getActionCommand().length());
+
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         // TODO add your handling code here:
-        Finish();
+        Finish(evt.getActionCommand().length());
     }//GEN-LAST:event_btnFinishActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
@@ -545,6 +685,16 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         Next();
     }//GEN-LAST:event_btnNextActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        System.out.println("Answered: " + list_choice.size());
+        for (Choice g : list_choice) {
+            System.out.println(g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
+            System.out.println("--------------------------------");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -562,13 +712,17 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NC1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NC1.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NC1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NC1.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NC1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NC1.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NC1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NC1.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -593,6 +747,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     private javax.swing.JCheckBox chkAnswer2;
     private javax.swing.JCheckBox chkAnswer3;
     private javax.swing.JCheckBox chkAnswer4;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblMin;

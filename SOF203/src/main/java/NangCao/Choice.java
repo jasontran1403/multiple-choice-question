@@ -10,16 +10,31 @@ package NangCao;
  * @author jason
  */
 public class Choice {
+
     private String question;
     private String choice;
+    private boolean selected;
+    private String marked;
+
+    public Choice(String question, String choice, boolean selected, String marked) {
+        this.question = question;
+        this.choice = choice;
+        this.selected = selected;
+        this.marked = marked;
+    }
 
     public Choice() {
     }
 
-    public Choice(String question, String choice) {
-        this.question = question;
-        this.choice = choice;
+    public String getMarked() {
+        return marked;
     }
+
+    public void setMarked(String marked) {
+        this.marked = marked;
+    }
+
+
 
     public String getQuestion() {
         return question;
@@ -36,6 +51,14 @@ public class Choice {
     public void setChoice(String choice) {
         this.choice = choice;
     }
-    
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     
 }
