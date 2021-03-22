@@ -5,6 +5,15 @@
  */
 package NangCao;
 
+import static NangCao.QR.createQR;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -16,7 +25,9 @@ import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
@@ -50,6 +61,52 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         setLocationRelativeTo(null);
     }
 
+    public static void createQR(String data, String path,
+            String charset, Map hashMap,
+            int height, int width)
+            throws WriterException, IOException {
+
+        BitMatrix matrix = new MultiFormatWriter().encode(
+                new String(data.getBytes(charset), charset),
+                BarcodeFormat.QR_CODE, width, height);
+
+        MatrixToImageWriter.writeToFile(
+                matrix,
+                path.substring(path.lastIndexOf('.') + 1),
+                new File(path));
+    }
+
+    public void QRCode()
+            throws WriterException, IOException,
+            NotFoundException {
+
+        // The data that the QR code will contain
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < result_test.size(); i++) {
+            sb.append(result_test.get(i).getFullname() + "\n" + result_test.get(i).getFpid() + "\n" + result_test.get(i).getScore());
+        }
+
+        System.out.println(sb);
+
+        // The path where the image will get saved
+        String path = "test.png";
+
+        // Encoding charset
+        String charset = "UTF-8";
+
+        Map<EncodeHintType, ErrorCorrectionLevel> hashMap
+                = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
+
+        hashMap.put(EncodeHintType.ERROR_CORRECTION,
+                ErrorCorrectionLevel.L);
+
+        // Create the QR code and save
+        // in the specified folder
+        // as a jpg file
+        createQR(String.valueOf(sb), path, charset, hashMap, 300, 300);
+        System.out.println("QR Code Generated!!! ");
+    }
+
     @Override
     public void run() {
         while (RUN_TIMER) {
@@ -71,7 +128,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     lblSec.setText(String.valueOf(sec));
                 }
 
-                Thread.sleep(100);
+                Thread.sleep(1000);
 
             } catch (Exception e) {
 
@@ -82,6 +139,11 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     public void Timeout() {
         Mark();
         JOptionPane.showMessageDialog(this, "Fullname: " + result_test.get(0).getFullname() + "\nStudent ID: " + result_test.get(0).getFpid() + "\nYour score: " + result_test.get(0).getScore());
+        try {
+            QRCode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 
@@ -178,9 +240,8 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             check = true;
         }
 
-        
-        
-        if (list_choice.size() != list_10.size()) {
+        Update();
+        if (list_choice.size() == 0) {
             if (check) {
                 Choice choice1 = new Choice();
                 choice1.setQuestion(q);
@@ -189,12 +250,22 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                 choice1.setMarked("Notdone");
                 list_choice.add(choice1);
             }
-        }
-        
-        for (Choice question : list_choice) {
-            System.out.println(question.getChoice().isEmpty());
+        } else {
+            if (!list_choice.contains(txaQuestion.getText())) {
+                if (check) {
+                    Choice choice1 = new Choice();
+                    choice1.setQuestion(q);
+                    choice1.setChoice(choice);
+                    choice1.setSelected(true);
+                    choice1.setMarked("Notdone");
+                    list_choice.add(choice1);
+                }
+            }
         }
 
+//                if (question.getQuestion().equalsIgnoreCase(txaQuestion.getText())) {
+//                    
+//                }
         int score = 0;
         for (Question question : list_10) {
             for (Choice choice1 : list_choice) {
@@ -226,53 +297,37 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             stu.setScore(score1);
             result_test.add(stu);
         }
+
         buttonGroup1.clearSelection();
         trung = true;
     }
 
-    void Finish(int i
-    ) {
+    public void Update() {
+        int index = 0;
+        boolean isExisted = false;
+        for (int i = 0; i < list_choice.size() - 1; i++) {
+            if (list_choice.get(i).getQuestion().equalsIgnoreCase(txaQuestion.getText())) {
+                index = i;
+                isExisted = true;
+            }
+
+            if (!list_choice.get(index).getChoice().isEmpty() && list_choice.get(i).getQuestion().contains(txaQuestion.getText())) {
+                list_choice.remove(index);
+
+            }
+
+        }
+    }
+
+    
+    void Finish(int i) {
         int yesno = JOptionPane.showConfirmDialog(this, "Do you want to finish the test?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (yesno == JOptionPane.YES_OPTION) {
             RUN_TIMER = false;
             runTimer.stop();
             btnFinish.setEnabled(false);
 
-            String choice = "";
-            String q = "";
-
-            if (chkAnswer1.isSelected()) {
-                choice = chkAnswer1.getText();
-                q = txaQuestion.getText();
-                check = true;
-            }
-            if (chkAnswer2.isSelected()) {
-                choice = chkAnswer2.getText();
-                q = txaQuestion.getText();
-                check = true;
-            }
-            if (chkAnswer3.isSelected()) {
-                choice = chkAnswer3.getText();
-                q = txaQuestion.getText();
-                check = true;
-            }
-            if (chkAnswer4.isSelected()) {
-                choice = chkAnswer4.getText();
-                q = txaQuestion.getText();
-                check = true;
-            }
-
-            if (check) {
-                Choice choice1 = new Choice();
-
-                choice1.setQuestion(q);
-                choice1.setChoice(choice);
-                list_choice.add(choice1);
-
-                buttonGroup1.clearSelection();
-
-            }
-
+            
             int score = 0;
 
             for (Question question : list) {
@@ -280,11 +335,12 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     if (question.getQuestion().equalsIgnoreCase(choice1.getQuestion())) {
                         if (question.getRight().equals(choice1.getChoice())) {
                             score += 1;
+                            System.out.println("Câu đúng: " + question.getQuestion() + " " + choice1.getChoice());
                         }
                     }
                 }
             }
-
+            Update();
             String fullname = JOptionPane.showInputDialog("Enter your fullname: ");
             while (fullname.length() == 0) {
                 JOptionPane.showMessageDialog(this, "Please enter your fullname!");
@@ -312,6 +368,11 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     JOptionPane.QUESTION_MESSAGE);
             if (choice7 == JOptionPane.OK_OPTION) {
                 JOptionPane.showMessageDialog(this, "Fullname: " + result_test.get(0).getFullname() + "\nStudent ID: " + result_test.get(0).getFpid() + "\nYour score: " + result_test.get(0).getScore());
+                try {
+                    QRCode();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 System.exit(0);
             }
 
@@ -434,6 +495,21 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         }
     }
 
+    public boolean Check() {
+        for (Choice ch : list_choice) {
+            for (Question qe : list_10) {
+                if (ch.getQuestion().equals(qe.getQuestion())) {
+                    System.out.println("Đã có");
+                    return false;
+                } else {
+                    System.out.println("Chưa có");
+
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -460,7 +536,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         chkAnswer2 = new javax.swing.JCheckBox();
         chkAnswer3 = new javax.swing.JCheckBox();
         chkAnswer4 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -581,13 +656,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         buttonGroup1.add(chkAnswer4);
         chkAnswer4.setText("Answer 4");
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -598,8 +666,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnStart)
-                        .addGap(166, 166, 166)
-                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Timer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(37, 37, 37))
@@ -626,11 +692,9 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(Timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnStart))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -662,7 +726,17 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         // TODO add your handling code here:
-        Finish(evt.getActionCommand().length());
+        if (list_choice.size() != list_10.size()) {
+            int choice = JOptionPane.showConfirmDialog(this, "You did not finish the test?",
+                    "Confirm", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (choice == JOptionPane.YES_NO_OPTION) {
+                Finish(evt.getActionCommand().length());
+            }
+        } else {
+            Finish(evt.getActionCommand().length());
+        }
+
     }//GEN-LAST:event_btnFinishActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
@@ -684,16 +758,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         Next();
     }//GEN-LAST:event_btnNextActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-
-        System.out.println("Answered: " + list_choice.size());
-        for (Choice g : list_choice) {
-            System.out.println(g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
-            System.out.println("--------------------------------");
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -747,7 +811,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     private javax.swing.JCheckBox chkAnswer2;
     private javax.swing.JCheckBox chkAnswer3;
     private javax.swing.JCheckBox chkAnswer4;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblMin;
