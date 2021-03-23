@@ -172,7 +172,7 @@
                       <Component id="chkSinging" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="chkDancing" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="13" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -248,11 +248,17 @@
       <SubComponents>
         <Component class="javax.swing.JRadioButton" name="rdoMale">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Male"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoFemale">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Female"/>
           </Properties>
         </Component>

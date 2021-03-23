@@ -83,7 +83,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
         // The data that the QR code will contain
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < result_test.size(); i++) {
-            sb.append(result_test.get(i).getFullname() + "\n" + result_test.get(i).getFpid() + "\n" + result_test.get(i).getScore());
+            sb.append("\nName: " + result_test.get(i).getFullname() + "\nID: " + result_test.get(i).getFpid() + "\nScore: " + result_test.get(i).getScore());
         }
 
         System.out.println(sb);
@@ -380,10 +380,6 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
 
     }
 
-    public void Add() {
-
-    }
-
     public void First() {
         txaQuestion.setText(list_10.get(0).getQuestion());
         chkAnswer1.setText(list_10.get(0).getAnswer1());
@@ -393,13 +389,29 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     }
 
     public void Remember() {
-
+        
+        for (Choice ce : list_choice) {
+            if(ce.isSelected()) {                
+                if (ce.getQuestion().equals(txaQuestion.getText()) && ce.getChoice().equals(chkAnswer1.getText())) {
+                    chkAnswer1.setSelected(true);
+                }
+                if (ce.getQuestion().equals(txaQuestion.getText()) && ce.getChoice().equals(chkAnswer2.getText())) {
+                    chkAnswer2.setSelected(true);
+                }
+                if (ce.getQuestion().equals(txaQuestion.getText()) && ce.getChoice().equals(chkAnswer3.getText())) {
+                    chkAnswer3.setSelected(true);
+                }
+                if (ce.getQuestion().equals(txaQuestion.getText()) && ce.getChoice().equals(chkAnswer4.getText())) {
+                    chkAnswer4.setSelected(true);
+                }
+            }
+        }
     }
 
     public void Next() {
         Mark();
+         
         buttonGroup1.clearSelection();
-
         if (txaQuestion.getText().isEmpty()) {
             txaQuestion.setText(list_10.get(1).getQuestion());
             chkAnswer1.setText(list_10.get(1).getAnswer1());
@@ -432,13 +444,14 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             System.out.println("Câu: " + g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
             System.out.println("--------------------------------");
         }
+        Remember();
     }
 
     public void Prev() {
 
         Mark();
         buttonGroup1.clearSelection();
-
+        
         if (txaQuestion.getText().isEmpty()) {
             txaQuestion.setText(list_10.get(list_10.size() - 1).getQuestion());
             chkAnswer1.setText(list_10.get(list_10.size() - 1).getAnswer1());
@@ -468,6 +481,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
             System.out.println("Câu: " + g.getQuestion() + " " + g.getChoice() + " " + g.isSelected() + " " + g.getMarked());
             System.out.println("--------------------------------");
         }
+        Remember();
     }
 
     public void Last() {

@@ -19,6 +19,7 @@ public class Bai1 extends javax.swing.JFrame {
     public Bai1() {
         initComponents();
         setLocationRelativeTo(null);
+        rdoMale.setSelected(true);
     }
     
     boolean check() {
@@ -98,7 +99,7 @@ public class Bai1 extends javax.swing.JFrame {
                     .addComponent(chkReading)
                     .addComponent(chkSinging)
                     .addComponent(chkDancing))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,8 +116,10 @@ public class Bai1 extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        buttonGroup1.add(rdoMale);
         rdoMale.setText("Male");
 
+        buttonGroup1.add(rdoFemale);
         rdoFemale.setText("Female");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
