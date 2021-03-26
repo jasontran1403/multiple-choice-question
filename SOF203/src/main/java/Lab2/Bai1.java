@@ -228,14 +228,15 @@ public class Bai1 extends javax.swing.JFrame {
                 st = st + "Sex: Female" + "\n";
             }
             st = st + "Qualification: " + cboQuali.getSelectedItem() + "\n";
+            st = st + "Hobby: ";
             if (chkReading.isSelected()) {
-                st = st + "Hobby: Reading" + "\n";
+                st = st + "Reading ";
             }
             if (chkSinging.isSelected()) {
-                st = st + "Hobby: Singing" + "\n";
+                st = st + "Singing ";
             }
             if (chkDancing.isSelected()) {
-                st = st + "Hobby: Dancing" + "\n";
+                st = st + "Dancing" + "\n";
             }
             JOptionPane.showMessageDialog(this, st);
         } 

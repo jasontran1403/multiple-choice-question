@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package NangCao;
+package NangCao2;
 
-import static NangCao.QR.createQR;
+import static NangCao2.QR.createQR;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -14,6 +14,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -23,8 +25,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +63,17 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
     public NC1() {
         initComponents();
         setLocationRelativeTo(null);
+    }
+    
+    javax.swing.Timer t;
+    public void JProgressBarTimer() {
+        initComponents();
+        ActionListener a = new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            Next();
+          }
+        };
+        t = new javax.swing.Timer(1000, a);
     }
 
     public static void createQR(String data, String path,
@@ -770,7 +785,7 @@ public class NC1 extends javax.swing.JFrame implements Runnable {
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         // TODO add your handling code here:
-        Next();
+        t.start();       
     }//GEN-LAST:event_btnNextActionPerformed
 
     /**
