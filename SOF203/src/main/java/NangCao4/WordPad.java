@@ -33,6 +33,7 @@ public class WordPad extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         initCboSort();
         cboSize.setSelectedIndex(7);
+        cboFont.setSelectedItem("Arial");
         initUnderline();
     }
 
@@ -115,7 +116,7 @@ public class WordPad extends javax.swing.JFrame {
 
     }
 
-    public void Bold() {
+    public void Style() {
         int a = cboFont.getSelectedIndex();
         int vt = 0;
         for (int i = 0; i < lstFont.length; i++) {
@@ -161,35 +162,6 @@ public class WordPad extends javax.swing.JFrame {
         }
 
     }
-
-    boolean italic = true;
-
-    public void Italic() {
-        int a = cboFont.getSelectedIndex();
-        int vt = 0;
-        for (int i = 0; i < lstFont.length; i++) {
-            if (a == i) {
-                vt = a;
-            }
-        }
-        String font = lstFont[vt].toString();
-        String vl = cboSize.getSelectedItem().toString();
-        int value = Integer.valueOf(vl);
-        if (b % 2 == 0 && i % 2 == 0) {
-            edPage.setFont(new Font(font, Font.PLAIN, value));
-        }
-        if (b % 2 != 0 && i % 2 == 0) {
-            edPage.setFont(new Font(font, Font.BOLD, value));
-        }
-        if (b % 2 != 0 && i % 2 != 0) {
-            edPage.setFont(new Font(font, Font.BOLD | Font.ITALIC, value));
-        }
-        if (b % 2 == 0 && i % 2 != 0) {
-            edPage.setFont(new Font(font, Font.ITALIC, value));
-        }
-    }
-
-    boolean underline = true;
 
     public void Underline() {
         Font font = edPage.getFont();
@@ -536,7 +508,7 @@ public class WordPad extends javax.swing.JFrame {
     private void btnUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUActionPerformed
         // TODO add your handling code here:
         u++;
-        Bold();
+        Style();
     }//GEN-LAST:event_btnUActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -558,7 +530,7 @@ public class WordPad extends javax.swing.JFrame {
     private void btnBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBActionPerformed
         // TODO add your handling code here:
         b++;
-        Bold();
+        Style();
 
     }//GEN-LAST:event_btnBActionPerformed
 
@@ -566,7 +538,7 @@ public class WordPad extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         i++;
-        Bold();
+        Style();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
