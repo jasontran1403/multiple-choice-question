@@ -400,7 +400,6 @@ public class WordPad extends javax.swing.JFrame {
         jMenu1.setText("File");
 
         mnuFileSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.META_DOWN_MASK));
-        mnuFileSave.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multi-choice-question/SOF203/src/main/java/Slide4/images/save.png")); // NOI18N
         mnuFileSave.setText("Save");
         mnuFileSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -410,7 +409,6 @@ public class WordPad extends javax.swing.JFrame {
         jMenu1.add(mnuFileSave);
 
         mnuFileOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.META_DOWN_MASK));
-        mnuFileOpen.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multi-choice-question/SOF203/src/main/java/Slide4/images/add.png")); // NOI18N
         mnuFileOpen.setText("Open");
         mnuFileOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -420,7 +418,6 @@ public class WordPad extends javax.swing.JFrame {
         jMenu1.add(mnuFileOpen);
 
         mnuFileExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.META_DOWN_MASK));
-        mnuFileExit.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multi-choice-question/SOF203/src/main/java/Slide4/images/shut_down.png")); // NOI18N
         mnuFileExit.setText("Exit");
         mnuFileExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

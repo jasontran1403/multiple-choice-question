@@ -113,7 +113,7 @@ public class Bai3 extends javax.swing.JFrame {
         // TODO add your handling code here:
         int value = jSlider1.getValue();
         txtValue.setText(String.valueOf(value));
-        lblFont.setFont(new java.awt.Font("Arial", 10, value));
+        lblFont.setFont(new java.awt.Font("Arial", 1, value));
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void btnSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetActionPerformed
