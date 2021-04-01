@@ -8,13 +8,13 @@ package NangCao4;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
- 
+
 class MyEditorKit extends StyledEditorKit {
 
     public ViewFactory getViewFactory() {
         return new StyledViewFactory();
     }
- 
+
     static class StyledViewFactory implements ViewFactory {
 
         public View create(Element elem) {
@@ -30,37 +30,23 @@ class MyEditorKit extends StyledEditorKit {
                     return new CenteredBoxView(elem, View.Y_AXIS);
                 } else if (kind.equals(StyleConstants.ComponentElementName)) {
                     return new ComponentView(elem);
-                } else if (kind.equals(StyleConstants.IconElementName)) {
+                }
+                else if (kind.equals(StyleConstants.IconElementName)) {
 
                     return new IconView(elem);
                 }
             }
- 
+
             return new LabelView(elem);
         }
 
     }
 }
- 
+
 class CenteredBoxView extends BoxView {
+
     public CenteredBoxView(Element elem, int axis) {
 
-        super(elem,axis);
-    }
-    protected void layoutMajorAxis(int targetSpan, int axis, int[] offsets, int[] spans) {
-
-        super.layoutMajorAxis(targetSpan,axis,offsets,spans);
-        int textBlockHeight = 0;
-        int offset = 0;
- 
-        for (int i = 0; i < spans.length; i++) {
-
-            textBlockHeight = spans[i];
-        }
-//        offset = (targetSpan - textBlockHeight) / 2;
-//        for (int i = 0; i < offsets.length; i++) {
-//            offsets[i] += offset;
-//        }
-
+        super(elem, axis);
     }
 }

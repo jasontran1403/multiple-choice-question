@@ -8,6 +8,8 @@ package NangCao4;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +17,20 @@ import java.io.PrintWriter;
 import java.util.Map;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.undo.UndoManager;
 
 /**
  *
  * @author jason
  */
 public class WordPad extends javax.swing.JFrame {
+
+    UndoManager manager = new UndoManager();
 
     /**
      * Creates new form WordPad
@@ -32,16 +39,24 @@ public class WordPad extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         initCboSort();
+        btnUndo.show(true);
         cboSize.setSelectedIndex(7);
         cboFont.setSelectedItem("Arial");
-        initUnderline();
-    }
-
-    public void initUnderline() {
-        Font font = btnU.getFont();
-        Map attributes = font.getAttributes();
-        attributes.put(TextAttribute.UNDERLINE, 1);
-        btnU.setFont(font.deriveFont(attributes));
+        manager = new UndoManager();
+        btnUndo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    manager.undo();
+                } catch (Exception ex) {
+                }
+            }
+        });
+        edPage.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                manager.addEdit(e.getEdit());
+            }
+        });
+        pack();
     }
 
     String lstFont[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -64,11 +79,12 @@ public class WordPad extends javax.swing.JFrame {
             StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_CENTER);
             StyledDocument doc = (StyledDocument) edPage.getDocument();
             doc.insertString(0, content, attrs);
-            doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+            doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
         } catch (Exception ex) {
 
             ex.printStackTrace();
         }
+
     }
 
     public void AllignLeft() {
@@ -79,7 +95,7 @@ public class WordPad extends javax.swing.JFrame {
             StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_LEFT);
             StyledDocument doc = (StyledDocument) edPage.getDocument();
             doc.insertString(0, content, attrs);
-            doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+            doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
         } catch (Exception ex) {
 
             ex.printStackTrace();
@@ -94,7 +110,7 @@ public class WordPad extends javax.swing.JFrame {
             StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_RIGHT);
             StyledDocument doc = (StyledDocument) edPage.getDocument();
             doc.insertString(0, content, attrs);
-            doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+            doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
         } catch (Exception ex) {
 
             ex.printStackTrace();
@@ -135,6 +151,7 @@ public class WordPad extends javax.swing.JFrame {
         // 1 1 0
         if (b % 2 != 0 && i % 2 != 0 && u == 0) {
             edPage.setFont(new Font(font, Font.BOLD | Font.ITALIC, value));
+            System.out.println("kaka");
         }
         // 1 1 1
         if (b % 2 != 0 && i % 2 != 0 && u != 0) {
@@ -168,10 +185,10 @@ public class WordPad extends javax.swing.JFrame {
         Map attributes = font.getAttributes();
         if (u % 2 != 0) {
             attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-        }else {
+        } else {
             attributes.put(TextAttribute.UNDERLINE, -1);
         }
-        
+
         edPage.setFont(font.deriveFont(attributes));
     }
 
@@ -220,7 +237,7 @@ public class WordPad extends javax.swing.JFrame {
         cboColor = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         btnB = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnI = new javax.swing.JButton();
         btnU = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -235,13 +252,14 @@ public class WordPad extends javax.swing.JFrame {
         mnuFileOpen = new javax.swing.JMenuItem();
         mnuFileExit = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        btnUndo = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         jpHome.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        cboFont.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboFont.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         cboFont.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cboFontItemStateChanged(evt);
@@ -279,15 +297,16 @@ public class WordPad extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-        jButton2.setText("I");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnI.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        btnI.setText("I");
+        btnI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnIActionPerformed(evt);
             }
         });
 
-        btnU.setText("U");
+        btnU.setText("<html><span style=\"text-allign:center; font-size: 14;\"><u>U</u></span></html>");
+        btnU.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnU.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUActionPerformed(evt);
@@ -352,10 +371,10 @@ public class WordPad extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpHomeLayout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnI, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnU, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
+                                .addGap(52, 52, 52)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -385,14 +404,15 @@ public class WordPad extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(jpHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnB)
-                    .addComponent(jButton2)
-                    .addComponent(btnU)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jpHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jpHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnB)
+                        .addComponent(btnI)
+                        .addComponent(jButton4)
+                        .addComponent(jButton5)
+                        .addComponent(jButton6))
+                    .addComponent(btnU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(edPage);
@@ -429,6 +449,16 @@ public class WordPad extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu3.setText("Home");
+
+        btnUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.META_DOWN_MASK));
+        btnUndo.setText("Undo");
+        btnUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUndoActionPerformed(evt);
+            }
+        });
+        jMenu3.add(btnUndo);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -506,6 +536,12 @@ public class WordPad extends javax.swing.JFrame {
         // TODO add your handling code here:
         u++;
         Style();
+        System.out.println(u);
+        if (u % 2 != 0) {
+            btnU.setBackground(Color.green);
+        } else {
+            btnU.setBackground(new Color(255, 255, 255));
+        }
     }//GEN-LAST:event_btnUActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -529,14 +565,30 @@ public class WordPad extends javax.swing.JFrame {
         b++;
         Style();
 
+        if (b % 2 != 0) {
+            btnB.setBackground(Color.green);
+        } else {
+            btnB.setBackground(new Color(255, 255, 255));
+        }
     }//GEN-LAST:event_btnBActionPerformed
 
     int i = 0;
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIActionPerformed
         // TODO add your handling code here:
         i++;
         Style();
-    }//GEN-LAST:event_jButton2ActionPerformed
+
+        if (i % 2 != 0) {
+            btnI.setBackground(Color.green);
+        } else {
+            btnI.setBackground(new Color(255, 255, 255));
+        }
+    }//GEN-LAST:event_btnIActionPerformed
+
+    private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnUndoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -576,12 +628,13 @@ public class WordPad extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnB;
+    private javax.swing.JButton btnI;
     private javax.swing.JButton btnU;
+    private javax.swing.JMenuItem btnUndo;
     private javax.swing.JComboBox<String> cboColor;
     private javax.swing.JComboBox<String> cboFont;
     private javax.swing.JComboBox<String> cboSize;
     private javax.swing.JEditorPane edPage;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
