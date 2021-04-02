@@ -40,24 +40,24 @@ public class Login extends javax.swing.JFrame {
             // Tạo đối tượng thực thi câu lệnh Select
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            System.out.println(rs.getString("ID") + " " + rs.getString("PW"));
+            System.out.println(rs.getString("username") + " " + rs.getString("password") + " " + rs.getString("role"));
             // Thực thi
-            Vector data = null;
-            //tblModel.setRowCount(0);
-            // Nếu sách không tồn tại
-            if (rs.isBeforeFirst() == false) {
-                JOptionPane.showMessageDialog(this, "Chưa có thông tin phòng ban!");
-                return;
-            }
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                data = new Vector();
-                data.add(rs.getString("ID"));
-                data.add(rs.getString("PW"));
-                data.add(rs.getString("ROLE"));
-                // Thêm một dòng vào table model
-                //tblModel.addRow(data);
-            }
+//            Vector data = null;
+//            //tblModel.setRowCount(0);
+//            // Nếu sách không tồn tại
+//            if (rs.isBeforeFirst() == false) {
+//                JOptionPane.showMessageDialog(this, "Chưa có thông tin phòng ban!");
+//                return;
+//            }
+//            // Trong khi chưa hết dữ liệu
+//            while (rs.next()) {
+//                data = new Vector();
+//                data.add(rs.getString("ID"));
+//                data.add(rs.getString("PW"));
+//                data.add(rs.getString("ROLE"));
+//                // Thêm một dòng vào table model
+//                //tblModel.addRow(data);
+//            }
             //jTable1.setModel(tblModel); // Thêm dữ liệu vào table
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +87,6 @@ public class Login extends javax.swing.JFrame {
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(500, 400));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -126,7 +125,7 @@ public class Login extends javax.swing.JFrame {
         jButton3.setText("Login By QR Code");
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multi-choice-question/SOF203/IconSlide2/VietNam.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\aitrade.jpg")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

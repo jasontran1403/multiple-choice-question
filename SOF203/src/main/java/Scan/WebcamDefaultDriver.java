@@ -1,3 +1,4 @@
+package Scan;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.sarxos.webcam.WebcamDevice;
 import com.github.sarxos.webcam.WebcamDiscoverySupport;
+import static com.github.sarxos.webcam.WebcamDiscoverySupport.DEFAULT_SCAN_INTERVAL;
 import com.github.sarxos.webcam.WebcamDriver;
 import com.github.sarxos.webcam.WebcamTask;
 import com.github.sarxos.webcam.ds.buildin.natives.Device;

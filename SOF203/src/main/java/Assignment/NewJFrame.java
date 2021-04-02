@@ -168,10 +168,10 @@ public class NewJFrame extends javax.swing.JFrame {
 
             while (rs.next()) {
                 data = new Vector();
-                data.add(rs.getString("ID"));
-                data.add(rs.getString("PW"));
-                data.add(rs.getString("ROLE"));
-                System.out.println(rs.getString("ID") + " " + rs.getString("PW"));
+                data.add(rs.getString("username"));
+                data.add(rs.getString("password"));
+                data.add(rs.getString("role"));
+                System.out.println(rs.getString("username") + " " + rs.getString("password") + " " + rs.getString("role"));
                 // Thêm một dòng vào table model
                 tblModel.addRow(data);
             }
@@ -204,7 +204,7 @@ public class NewJFrame extends javax.swing.JFrame {
             // Trong khi chưa hết dữ liệu
             boolean check = true;
             while (rs.next()) {
-                if (rs.getString("ID").equals(txtUser.getText())) {
+                if (rs.getString("username").equals(txtUser.getText())) {
                     System.out.println("Username đã tồn tại");
                     check = false;
                     return;
@@ -244,25 +244,17 @@ public class NewJFrame extends javax.swing.JFrame {
             boolean checkus = true;
             boolean checkpw = true;
             while (rs.next()) {
-                if (rs.getString("ID").equals(txtUser.getText())) {
+                if (rs.getString("username").equals(txtUser.getText())) {
 //                    System.out.println("ID: " + rs.getString("ID"));
-                    if (rs.getString("PW").equals(txtPass.getText())) {
-                        checkus = true;
-                        checkpw = true;
+                    if (rs.getString("password").equals(txtPass.getText())) {
+                        Login test = new Login();
+                        test.setVisible(true);
+                        this.dispose();
                         return;
-                    } else {
-                        checkpw = false;
                     }
-
-                } else {
-                    checkus = false;
-                }
-                if (checkus == true && checkpw == true) {
-                    Login test = new Login();
-                    test.setVisible(true);
-                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Sai tên đăng nhập hoặc mật khẩu!");
+                    return;
                 }
 
             }
