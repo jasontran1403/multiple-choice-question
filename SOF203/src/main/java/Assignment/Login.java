@@ -8,6 +8,8 @@ package Assignment;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
@@ -17,52 +19,58 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
+    List<Account> list = new ArrayList<>();
+
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
         LoadData();
     }
-    
+
+    public void ChangeForm() {
+        Registration rg = new Registration();
+        rg.setVisible(true);
+        this.dispose();
+    }
+
     public void LoadData() {
+        System.out.println("----------------------");
         Connection conn = null;
         try {
             String dbURL = "jdbc:mysql://localhost:3306/Account";
             String username = "root";
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
-            if (conn != null) {
-                System.out.println("Kết nối thành công");
-            }
-            // Câu lệnh xem dữ liệu
+
             String sql = "select * from ListAccount";
             // Tạo đối tượng thực thi câu lệnh Select
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            System.out.println(rs.getString("username") + " " + rs.getString("password") + " " + rs.getString("role"));
+
             // Thực thi
-//            Vector data = null;
-//            //tblModel.setRowCount(0);
-//            // Nếu sách không tồn tại
-//            if (rs.isBeforeFirst() == false) {
-//                JOptionPane.showMessageDialog(this, "Chưa có thông tin phòng ban!");
-//                return;
-//            }
-//            // Trong khi chưa hết dữ liệu
-//            while (rs.next()) {
-//                data = new Vector();
-//                data.add(rs.getString("ID"));
-//                data.add(rs.getString("PW"));
-//                data.add(rs.getString("ROLE"));
-//                // Thêm một dòng vào table model
-//                //tblModel.addRow(data);
-//            }
-            //jTable1.setModel(tblModel); // Thêm dữ liệu vào table
+            // Nếu sách không tồn tại
+            while (rs.next()) {
+
+                Account acc = new Account();
+
+                acc.setUsername(rs.getString("username"));
+                acc.setPassword(rs.getString("password"));
+                acc.setRole(rs.getString("role"));
+
+                list.add(acc);
+
+            }
+            conn.close();
+            st.close();
+            rs.close();
+            System.out.println(list.size());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
     }
 
     /**
@@ -90,42 +98,61 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setBackground(new java.awt.Color(153, 255, 153));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 255, 255));
         jLabel2.setText("Login");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, -1, -1));
 
+        jLabel3.setBackground(new java.awt.Color(153, 255, 153));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(102, 255, 255));
         jLabel3.setText("Username");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 116, -1, 30));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, -1, 40));
 
+        jLabel1.setBackground(new java.awt.Color(153, 255, 153));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 255, 255));
         jLabel1.setText("Password");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 156, -1, 30));
-        jPanel1.add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 250, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, -1, 40));
+        jPanel1.add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 160, -1));
 
         txtPass.setText("jPasswordField1");
-        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 250, -1));
+        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 160, 160, -1));
 
+        chkShow.setBackground(new java.awt.Color(204, 255, 204));
+        chkShow.setForeground(new java.awt.Color(204, 255, 204));
         chkShow.setText("Show password!");
         chkShow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkShowActionPerformed(evt);
             }
         });
-        jPanel1.add(chkShow, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 210, -1));
+        jPanel1.add(chkShow, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 140, -1));
 
+        jButton1.setBackground(new java.awt.Color(255, 204, 204));
         jButton1.setText("Sign In");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 260, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 270, 80, -1));
 
+        jButton2.setBackground(new java.awt.Color(204, 204, 255));
         jButton2.setText("Sign Up");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, -1, -1));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 90, -1));
 
+        jButton3.setBackground(new java.awt.Color(0, 255, 204));
         jButton3.setText("Login By QR Code");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, -1, -1));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\aitrade.jpg")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\login.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -145,18 +172,53 @@ public class Login extends javax.swing.JFrame {
     private void chkShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowActionPerformed
         // TODO add your handling code here:
         if (chkShow.isSelected()) {
-            txtPass.setEchoChar((char)0);
-        }else {
+            txtPass.setEchoChar((char) 0);
+        } else {
             txtPass.setEchoChar('*');
         }
     }//GEN-LAST:event_chkShowActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String user = txtUser.getText();
+        // TODO add your handling code here:        
+        String id = txtUser.getText();
         String pw = txtPass.getText();
-        
+        String role = "";
+        boolean check = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUsername().equals(id)) {
+                if (list.get(i).getPassword().equals(pw)) {
+                    role = list.get(i).getRole();
+                    check = true;
+                } else {
+                    check = false;
+                }
+
+            }
+        }
+
+        if (check == true) {
+            if (role.equalsIgnoreCase("Lecturer")) {
+                StudentManager sm = new StudentManager();
+                sm.setVisible(true);
+                this.dispose();
+            }
+            if (role.equalsIgnoreCase("Manager Staff")) {
+                AdminManager am = new AdminManager();
+                am.setVisible(true);
+                this.dispose();
+            }
+            
+        }else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password!");
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        ChangeForm();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

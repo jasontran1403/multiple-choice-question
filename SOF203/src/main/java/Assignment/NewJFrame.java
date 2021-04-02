@@ -8,6 +8,8 @@ package Assignment;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +22,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private String header[] = {"Username", "Password", "Role"};
     private DefaultTableModel tblModel = new DefaultTableModel(header, 0);
+    List<Account> list = new ArrayList<>();
 
     /**
      * Creates new form NewJFrame
@@ -171,14 +174,39 @@ public class NewJFrame extends javax.swing.JFrame {
                 data.add(rs.getString("username"));
                 data.add(rs.getString("password"));
                 data.add(rs.getString("role"));
-                System.out.println(rs.getString("username") + " " + rs.getString("password") + " " + rs.getString("role"));
                 // Thêm một dòng vào table model
                 tblModel.addRow(data);
+
+                boolean check = false;
+                Account acc = new Account();
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getUsername().equals(rs.getString("username"))) {
+                        System.out.println("Username đã tồn tại");
+                        check = false;
+                    } else {
+                        check = true;
+                        return;                        
+                    }
+                    
+                }
+    
+                if (check) {
+                    acc.setUsername(rs.getString("username"));
+                    acc.setPassword(rs.getString("password"));
+                    acc.setRole(rs.getString("role"));
+
+                    list.add(acc);
+                    System.out.println("Đã thêm dữ liệu");
+                }else {
+                    System.out.println("Dữ liệu trùng");
+                }
             }
             jTable1.setModel(tblModel); // Thêm dữ liệu vào table
             conn.close();
             st.close();
             rs.close();
+            System.out.println(list.size());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -226,42 +254,8 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_AddActionPerformed
 
     private void CheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckActionPerformed
-        // TODO add your handling code here:
-        System.out.println("----------------------");
-        Connection conn = null;
-        try {
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
-
-            String sql = "select * from ListAccount";
-            // Tạo đối tượng thực thi câu lệnh Select
-            java.sql.Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            // Trong khi chưa hết dữ liệu
-            boolean checkus = true;
-            boolean checkpw = true;
-            while (rs.next()) {
-                if (rs.getString("username").equals(txtUser.getText())) {
-//                    System.out.println("ID: " + rs.getString("ID"));
-                    if (rs.getString("password").equals(txtPass.getText())) {
-                        Login test = new Login();
-                        test.setVisible(true);
-                        this.dispose();
-                        return;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Sai tên đăng nhập hoặc mật khẩu!");
-                    return;
-                }
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // TODO add your handling code here:      
+        System.out.println(list.size());
     }//GEN-LAST:event_CheckActionPerformed
 
     /**
