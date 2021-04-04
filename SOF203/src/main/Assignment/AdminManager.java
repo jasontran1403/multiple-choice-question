@@ -9,9 +9,9 @@ import java.awt.Image;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.ImageIcon;
@@ -40,7 +40,6 @@ public class AdminManager extends javax.swing.JFrame {
     }
 
     public void LoadData() {
-        liststu.clear();
         System.out.println("----------------------");
         Connection conn = null;
         try {
@@ -102,7 +101,7 @@ public class AdminManager extends javax.swing.JFrame {
         try {
             ImageIcon imageIcon = new ImageIcon(pathImg);
             Image image = imageIcon.getImage();
-            Image newimg = image.getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH);
+            Image newimg = image.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
             imageIcon = new ImageIcon(newimg);
             lblImg.setIcon(new ImageIcon(newimg));
         } catch (Exception e) {
@@ -149,7 +148,7 @@ public class AdminManager extends javax.swing.JFrame {
         }
         txaAdd.setText(model.getValueAt(j, 5).toString());
         lblImg.setIcon(new ImageIcon(((new ImageIcon(liststu.get(j).getImagepath()).getImage()).
-                getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH))));
+                getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH))));       
     }
 
     void New() {
@@ -165,7 +164,7 @@ public class AdminManager extends javax.swing.JFrame {
 
     void AddStudent() {
         Connection conn = null;
-        String sql1 = "INSERT INTO ListStudent (studentid, fullname, email, phonenum, sex, address, imgpath) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        System.out.println("----------------------");
         try {
             String stuid = txtStudentID.getText();
             String fullname = txtFullname.getText();
@@ -201,62 +200,12 @@ public class AdminManager extends javax.swing.JFrame {
             // Câu lệnh xem dữ liệu
 
             if (check) {
-
+                String sql1 = "INSERT INTO ListStudent VALUES ('" + stuid + "', '" + fullname + "', '" + email + "', '" + phone + "', '" + sex + "', '" + add + "', '" + IU + "');";
                 // Tạo đối tượng thực thi câu lệnh Select
-                PreparedStatement ps = conn.prepareStatement(sql1);
-                ps.setString(1, stuid);
-                ps.setString(2, fullname);
-                ps.setString(3, email);
-                ps.setString(4, phone);
-                ps.setString(5, sex);
-                ps.setString(6, add);
-                ps.setString(7, IU);
+                java.sql.Statement st1 = conn.createStatement();
+                int rs1 = st1.executeUpdate(sql1);
                 System.out.println("Thêm thành công");
-
-                int row = ps.executeUpdate();
-                if (row != 0) {
-                    LoadData();
-                    fillTable();
-                    IU = null;
-                } else {
-                    return;
-                }
             }
-
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    void DeleteStudent() {
-        Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
-
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
-
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListStudent";
-            ResultSet rs = st.executeQuery(sql);
-
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM ListStudent WHERE studentid=" + "'" + stuid + "'");
-
-                    st1.executeUpdate();
-                    LoadData();
-                    fillTable();
-                    IU = null;
-                }
-            }
-
             // Thực thi
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,7 +328,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblList);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 760, 290));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 760, 90));
 
         lblImg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 150, 150));
@@ -401,11 +350,6 @@ public class AdminManager extends javax.swing.JFrame {
         jPanel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 70, 40));
 
         btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\delete.png")); // NOI18N
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
         jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 300, 70, 40));
 
         btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\edit.png")); // NOI18N
@@ -495,11 +439,6 @@ public class AdminManager extends javax.swing.JFrame {
         lg.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        DeleteStudent();
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments

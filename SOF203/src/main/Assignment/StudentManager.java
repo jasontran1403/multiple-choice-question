@@ -7,7 +7,6 @@ package Assignment;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +27,17 @@ public class StudentManager extends javax.swing.JFrame {
     public StudentManager() {
         initComponents();
         setLocationRelativeTo(null);
+        LoadTable();
         LoadData();
     }
-    
-    void fillTable() {
-        DefaultTableModel model = (DefaultTableModel) tblList.getModel();
-        model.setRowCount(0);
-        for (Result rs : listrs) {
-            model.addRow(new Object[]{rs.getStuid(), rs.getFullname(), rs.getJava(), rs.getJavascript(), rs.getHtmlcss(), rs.getAverage()});
-        }
+
+    public void LoadTable() {
+        tblList.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tblList.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tblList.getColumnModel().getColumn(2).setPreferredWidth(20);
+        tblList.getColumnModel().getColumn(3).setPreferredWidth(20);
+        tblList.getColumnModel().getColumn(4).setPreferredWidth(20);
+        tblList.setAutoResizeMode(tblList.AUTO_RESIZE_LAST_COLUMN);
     }
     
     public void LoadData() {
@@ -91,39 +92,7 @@ public class StudentManager extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fillTable();
-    }
-    
-    void DeleteResult() {
-        Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
-
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
-
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListStudent";
-            ResultSet rs = st.executeQuery(sql);
-
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM ListResult WHERE studentid=" + "'" + stuid + "'");
-
-                    st1.executeUpdate();
-                    LoadData();
-                    fillTable();
-                }
-            }
-
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
     }
 
     /**
@@ -170,6 +139,7 @@ public class StudentManager extends javax.swing.JFrame {
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(900, 600));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -231,11 +201,6 @@ public class StudentManager extends javax.swing.JFrame {
         btnSave.setBounds(20, 80, 65, 40);
 
         btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\delete.png")); // NOI18N
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
         jPanel4.add(btnDelete);
         btnDelete.setBounds(20, 130, 65, 40);
 
@@ -444,11 +409,6 @@ public class StudentManager extends javax.swing.JFrame {
         lg.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        DeleteResult();
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments

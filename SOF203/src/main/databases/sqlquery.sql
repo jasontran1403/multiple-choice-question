@@ -11,13 +11,13 @@ studentid VARCHAR(10) PRIMARY KEY,
 fullname VARCHAR(30),
 email VARCHAR(30),
 phonenum VARCHAR(14),
-sex VARCHAR(5),
+sex VARCHAR(6),
 address VARCHAR(50),
 imgpath VARCHAR(100)
 );
 
 DELETE FROM ListStudent;
-INSERT INTO ListStudent VALUES ('PS14692', 'Jason Tran', 'jasont14692@gmail.com', '84 934513968', 'Male', '123 I Dont know', 'C:\Users\Admin\Desktop\multiple-choice-question\SOF203\src\main\image\kaka');
+INSERT INTO ListStudent VALUES ('PS146921', 'Jason Tran', 'jasont14692@gmail.com', '84 934513968', 'Male', '123 I Dont know', 'C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\image\\kaka');
 
 CREATE TABLE StudentResult (
 id INT PRIMARY KEY auto_increment,
@@ -36,6 +36,9 @@ INSERT INTO ListStudent VALUES (3, 'PS14692', 'Jason Tran', 9.5, 9.9, 9.6, 9.67)
 SELECT * FROM ListAccount;
 SELECT * FROM ListStudent;
 SELECT * FROM StudentResult;
+DELETE FROM ListStudent WHERE studentid = 'PS14692';
+
 DROP TABLE ListAccount;
-DROP TABLE ListStudent;
+
 DROP TABLE StudentResult;
+DROP TABLE ListStudent;

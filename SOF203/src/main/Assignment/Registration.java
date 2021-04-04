@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -284,7 +285,7 @@ public class Registration extends javax.swing.JFrame {
                 btnSignUpActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 390, 90, 40));
+        jPanel1.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, -1, -1));
 
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -292,7 +293,7 @@ public class Registration extends javax.swing.JFrame {
                 btnResetActionPerformed(evt);
             }
         });
-        jPanel1.add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 80, 40));
+        jPanel1.add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, -1, -1));
 
         btnSignIn.setText("Sign In");
         btnSignIn.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +301,7 @@ public class Registration extends javax.swing.JFrame {
                 btnSignInActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 390, 90, 40));
+        jPanel1.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 255, 51));
