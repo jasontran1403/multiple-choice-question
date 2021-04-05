@@ -249,6 +249,7 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
+        btnSearch.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/search.png")); // NOI18N
         btnSearch.setText("Search");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -283,26 +284,37 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(204, 204, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
-        jPanel4.add(btnNew);
-        btnNew.setBounds(20, 30, 75, 40);
 
+        btnNew.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/new.png")); // NOI18N
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnNew);
+        btnNew.setBounds(20, 30, 48, 40);
+
+        btnSave.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
         jPanel4.add(btnSave);
-        btnSave.setBounds(20, 80, 75, 40);
+        btnSave.setBounds(20, 80, 48, 40);
 
+        btnDelete.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
             }
         });
         jPanel4.add(btnDelete);
-        btnDelete.setBounds(20, 130, 75, 40);
+        btnDelete.setBounds(20, 130, 48, 40);
+
+        btnUpdate.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/edit.png")); // NOI18N
         jPanel4.add(btnUpdate);
-        btnUpdate.setBounds(20, 180, 75, 40);
+        btnUpdate.setBounds(20, 180, 48, 40);
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 140, 110, 260));
 
@@ -337,6 +349,14 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/first.png"))); // NOI18N
+
+        jButton5.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/next.png")); // NOI18N
+
+        jButton6.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/previous.png")); // NOI18N
+
+        jButton7.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/last.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -420,7 +440,7 @@ public class StudentManager extends javax.swing.JFrame {
                     .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 30, Short.MAX_VALUE))
+                .addGap(0, 16, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 580, 260));
@@ -473,6 +493,8 @@ public class StudentManager extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, -1, -1));
+
+        Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/bg.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -505,6 +527,10 @@ public class StudentManager extends javax.swing.JFrame {
         // TODO add your handling code here:
         AddResult();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNewActionPerformed
 
     /**
      * @param args the command line arguments

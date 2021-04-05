@@ -341,7 +341,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 210, 30));
 
-        btnUpload.setText("Upload");
+        btnUpload.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/up.png")); // NOI18N
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
@@ -349,20 +349,20 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(btnUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, 70, -1));
 
-        btnRemove.setText("Remove");
+        btnRemove.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/remove.png")); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 280, -1, -1));
+        jPanel1.add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 280, 70, -1));
 
         lblImg.setBackground(new java.awt.Color(255, 255, 255));
         lblImg.setForeground(new java.awt.Color(255, 255, 255));
         lblImg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 140, 170));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\registration.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/registration.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 609, 569));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
