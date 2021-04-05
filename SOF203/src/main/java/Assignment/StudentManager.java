@@ -40,6 +40,7 @@ public class StudentManager extends javax.swing.JFrame {
     }
     
     public void LoadData() {
+        listrs.clear();
         System.out.println("----------------------");
         Connection conn = null;
         try {
@@ -94,6 +95,68 @@ public class StudentManager extends javax.swing.JFrame {
         fillTable();
     }
     
+    void AddResult() {
+        Connection conn = null;
+        String sql1 = "INSERT INTO StudentResult (id, studentid, fullname, java, javascript, htmlcss, average) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            String stuid = txtStudentID.getText();
+            String fullname = txtFullname.getText();
+            String java = txtJava.getText();
+            String javascript = txtJavaScript.getText();
+            String htmlcss = txtHTMLCSS.getText();
+            double avg = (9.5 + 9.6 + 9.9)/3;
+            System.out.println(avg);
+            String dbURL = "jdbc:mysql://localhost:3306/Account";
+            String username = "root";
+            String password = "Hai14031993";
+            conn = DriverManager.getConnection(dbURL, username, password);
+
+            // Kiểm tra trước khi thêm
+            java.sql.Statement st = conn.createStatement();
+            String sql = "select * from StudentResult";
+            ResultSet rs = st.executeQuery(sql);
+
+            // Trong khi chưa hết dữ liệu
+            boolean check = true;
+            while (rs.next()) {
+                if (rs.getString("studentid").equals(txtStudentID.getText())) {
+                    System.out.println("Username đã tồn tại");
+                    check = false;
+                    return;
+                }
+            }
+            // Câu lệnh xem dữ liệu
+
+            if (check) {
+
+                // Tạo đối tượng thực thi câu lệnh Select
+                PreparedStatement ps = conn.prepareStatement(sql1);
+                ps.setString(1, null);
+                ps.setString(2, stuid);
+                ps.setString(3, fullname);
+                ps.setString(4, java);
+                ps.setString(5, javascript);
+                ps.setString(6, htmlcss);
+                ps.setString(7, String.valueOf(avg));
+
+                System.out.println("Thêm thành công");
+
+                int row = ps.executeUpdate();
+                if (row != 0) {
+                    LoadData();
+                    fillTable();
+                } else {
+                    return;
+                }
+            }
+
+            // Thực thi
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
     void DeleteResult() {
         Connection conn = null;
         try {
@@ -106,13 +169,13 @@ public class StudentManager extends javax.swing.JFrame {
 
             // Kiểm tra trước khi thêm
             java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListStudent";
+            String sql = "select * from StudentResult";
             ResultSet rs = st.executeQuery(sql);
 
             // Trong khi chưa hết dữ liệu
             while (rs.next()) {
                 if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM ListResult WHERE studentid=" + "'" + stuid + "'");
+                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM StudentResult WHERE studentid=" + "'" + stuid + "'");
 
                     st1.executeUpdate();
                     LoadData();
@@ -186,7 +249,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\search.png")); // NOI18N
         btnSearch.setText("Search");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -221,27 +283,26 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(204, 204, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
-
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\new.png")); // NOI18N
         jPanel4.add(btnNew);
-        btnNew.setBounds(20, 30, 65, 40);
+        btnNew.setBounds(20, 30, 75, 40);
 
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\save.png")); // NOI18N
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnSave);
-        btnSave.setBounds(20, 80, 65, 40);
+        btnSave.setBounds(20, 80, 75, 40);
 
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
             }
         });
         jPanel4.add(btnDelete);
-        btnDelete.setBounds(20, 130, 65, 40);
-
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\edit.png")); // NOI18N
+        btnDelete.setBounds(20, 130, 75, 40);
         jPanel4.add(btnUpdate);
-        btnUpdate.setBounds(20, 180, 65, 40);
+        btnUpdate.setBounds(20, 180, 75, 40);
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 140, 110, 260));
 
@@ -276,14 +337,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
-
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\first.png")); // NOI18N
-
-        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\next.png")); // NOI18N
-
-        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\previous.png")); // NOI18N
-
-        jButton7.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\last.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -420,8 +473,6 @@ public class StudentManager extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, -1, -1));
-
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\bg.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -449,6 +500,11 @@ public class StudentManager extends javax.swing.JFrame {
         // TODO add your handling code here:
         DeleteResult();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        AddResult();
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
      * @param args the command line arguments

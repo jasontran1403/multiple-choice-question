@@ -7,6 +7,7 @@ package Assignment;
 
 import java.awt.Image;
 import java.io.File;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -248,7 +249,7 @@ public class AdminManager extends javax.swing.JFrame {
             // Trong khi chưa hết dữ liệu
             while (rs.next()) {
                 if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM ListStudent WHERE studentid=" + "'" + stuid + "'");
+                    CallableStatement st1 = conn.prepareCall("{CALLL SP_DELETE('" + stuid + "')}");
 
                     st1.executeUpdate();
                     LoadData();
@@ -256,6 +257,7 @@ public class AdminManager extends javax.swing.JFrame {
                     IU = null;
                 }
             }
+            
 
             // Thực thi
         } catch (Exception e) {

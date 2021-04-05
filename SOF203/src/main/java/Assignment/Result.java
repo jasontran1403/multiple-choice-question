@@ -70,7 +70,7 @@ public class Result {
     }
 
     public double getAverage() {
-        return average;
+        return (this.java + this.javascript + this.htmlcss)/3;
     }
 
     public void setAverage(double average) {
