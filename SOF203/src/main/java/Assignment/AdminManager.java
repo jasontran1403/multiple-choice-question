@@ -18,6 +18,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -38,6 +39,12 @@ public class AdminManager extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         LoadData();
         rdoMale.setSelected(true);
+        tblList.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tblList.getColumnModel().getColumn(1).setPreferredWidth(80);
+        tblList.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tblList.getColumnModel().getColumn(3).setPreferredWidth(40);
+        tblList.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tblList.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
 
     public void LoadData() {

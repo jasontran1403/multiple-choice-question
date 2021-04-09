@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,9 +20,11 @@ import javax.swing.table.DefaultTableModel;
  * @author Admin
  */
 public class StudentManager extends javax.swing.JFrame {
+
     List<Result> listrs = new ArrayList<>();
     private String header[] = {"Student ID", "Fullname", "Java", "JavaScript", "HTML/CSS", "AVERAGE"};
     private DefaultTableModel tblModel = new DefaultTableModel(header, 0);
+
     /**
      * Creates new form StudentManager
      */
@@ -29,14 +32,33 @@ public class StudentManager extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         LoadData();
+        tblList.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tblList.getColumnModel().getColumn(1).setPreferredWidth(80);
+        tblList.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tblList.getColumnModel().getColumn(3).setPreferredWidth(40);
+        tblList.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tblList.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
-    
+
     void fillTable() {
         DefaultTableModel model = (DefaultTableModel) tblList.getModel();
         model.setRowCount(0);
         for (Result rs : listrs) {
-            model.addRow(new Object[]{rs.getStuid(), rs.getFullname(), rs.getJava(), rs.getJavascript(), rs.getHtmlcss(), rs.getAverage()});
+            model.addRow(new Object[]{rs.getStuid(), rs.getFullname(), rs.getJava(), rs.getJavascript(), rs.getHtmlcss(), String.format("%.2f", rs.getAverage())});
         }
+    }
+    
+    void ClickTable() {
+            int j = tblList.getSelectedRow();
+            DefaultTableModel model1 = (DefaultTableModel) tblList.getModel();
+
+            txtFullname.setText(model1.getValueAt(j, 1).toString());
+            txtStudentID.setText(model1.getValueAt(j, 0).toString());          
+            txtJava.setText(model1.getValueAt(j, 2).toString());
+            txtJavaScript.setText(model1.getValueAt(j, 3).toString());
+            txtHTMLCSS.setText(model1.getValueAt(j, 4).toString());    
+            
+            lblAverage.setText(String.format("%.2f", model1.getValueAt(j, 4)));       
     }
     
     public void LoadData() {
@@ -66,8 +88,8 @@ public class StudentManager extends javax.swing.JFrame {
                 data.add(rs.getString("fullname"));
                 data.add(rs.getDouble("java"));
                 data.add(rs.getDouble("javascript"));
-                data.add(rs.getDouble("htmlcss"));
-                data.add(rs.getDouble("average"));
+                data.add(rs.getDouble("htmlcss"));            
+                data.add(String.format("%.2f", rs.getDouble("average")));
                 // Thêm một dòng vào table model
                 tblModel.addRow(data);
 
@@ -94,7 +116,7 @@ public class StudentManager extends javax.swing.JFrame {
         }
         fillTable();
     }
-    
+
     void AddResult() {
         Connection conn = null;
         String sql1 = "INSERT INTO StudentResult (id, studentid, fullname, java, javascript, htmlcss, average) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -104,7 +126,7 @@ public class StudentManager extends javax.swing.JFrame {
             String java = txtJava.getText();
             String javascript = txtJavaScript.getText();
             String htmlcss = txtHTMLCSS.getText();
-            double avg = (9.5 + 9.6 + 9.9)/3;
+            double avg = (9.5 + 9.6 + 9.9) / 3;
             System.out.println(avg);
             String dbURL = "jdbc:mysql://localhost:3306/Account";
             String username = "root";
@@ -156,7 +178,7 @@ public class StudentManager extends javax.swing.JFrame {
         }
 
     }
-    
+
     void DeleteResult() {
         Connection conn = null;
         try {
@@ -325,6 +347,8 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 153, 153));
         jLabel3.setText("Fullname");
 
+        txtFullname.setBackground(new java.awt.Color(255, 204, 204));
+
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 153, 153));
         jLabel4.setText("Student ID");
@@ -465,21 +489,21 @@ public class StudentManager extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblList.setEnabled(false);
+        tblList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblList);
         if (tblList.getColumnModel().getColumnCount() > 0) {
-            tblList.getColumnModel().getColumn(0).setResizable(false);
             tblList.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblList.getColumnModel().getColumn(1).setResizable(false);
             tblList.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tblList.getColumnModel().getColumn(2).setResizable(false);
             tblList.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tblList.getColumnModel().getColumn(3).setResizable(false);
             tblList.getColumnModel().getColumn(3).setPreferredWidth(50);
             tblList.getColumnModel().getColumn(4).setPreferredWidth(50);
         }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 800, 80));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 800, 90));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 102, 102));
@@ -531,6 +555,11 @@ public class StudentManager extends javax.swing.JFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNewActionPerformed
+
+    private void tblListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListMouseClicked
+        // TODO add your handling code here:
+        ClickTable();
+    }//GEN-LAST:event_tblListMouseClicked
 
     /**
      * @param args the command line arguments
