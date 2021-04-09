@@ -38,7 +38,7 @@ public class Test1 extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/giphy.gif")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/video/giphy.gif")); // NOI18N
 
         lbl.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         lbl.setForeground(new java.awt.Color(153, 0, 0));
